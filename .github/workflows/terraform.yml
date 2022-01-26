@@ -51,15 +51,15 @@ jobs:
       - name: 'Azure logins'
         uses: azure/login@v1
         with:
-         creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: 'Verfiying logins'
-        run: |
-         az webapp list --query "[?state=='Running']"
-       
+         creds: ${{ secrets.AZURE_CREDENTIALS }
+                
       - name: 'Installing azure Cli' 
         run: |
           sudo curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash 
+      
+      - name: 'Verfiying logins'
+        run: |
+         az webapp list --query "[?state=='Running']"
 
       - name: 'terraform init'
         uses: 'clouddrove/github-actions@v9.0.1'

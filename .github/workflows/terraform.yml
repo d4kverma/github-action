@@ -43,6 +43,11 @@ jobs:
 
   plan:
     name: 'terraform plan'
+    env: 
+      ARM_CLIENT_ID: ${{ secrets.clientId   }}
+      ARM_CLIENT_SECRETS: ${{ secrets.clientSecret }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.subscriptionId }}
+      ARM_TENANT_ID: ${{ secrets.tenantId }}
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'

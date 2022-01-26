@@ -54,7 +54,8 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       - name: 'Verfiying logins'
-        run: az webapp list --query "[?state=='Running']"
+        run: |
+         az webapp list --query "[?state=='Running']"
        
       - name: 'Installing azure Cli' 
         run: sudo curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash 

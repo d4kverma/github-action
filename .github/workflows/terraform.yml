@@ -63,6 +63,8 @@ jobs:
         uses: azure/CLI@v1
         with:
          azcliversion: 2.30.0
+        inlineScript: |
+          az account show
 
       - name: 'terraform plan'
         uses: 'clouddrove/github-actions@v9.0.1'

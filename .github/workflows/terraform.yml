@@ -28,7 +28,7 @@ jobs:
         uses: azure/login@v1
         with:
          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
+    
       - name: 'terraform init'
         uses: 'clouddrove/github-actions@v9.0.1'
         with:
@@ -59,6 +59,11 @@ jobs:
         with:
          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Azure CLI script
+        uses: azure/CLI@v1
+        with:
+         azcliversion: 2.30.0
+
       - name: 'terraform plan'
         uses: 'clouddrove/github-actions@v9.0.1'
         with:
@@ -84,13 +89,13 @@ jobs:
         uses: pre-commit/action@v2.0.3
         continue-on-error: true
 
-      - name: 'Slack Notification'
-        uses: clouddrove/action-slack@v2
-        with:
-          status: ${{ job.status }}
-          fields: repo,author
-          author_name: 'CloudDrove'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # required
-          #SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_TERRAFORM }} # required
-        if: always()
+      # - name: 'Slack Notification'
+      #   uses: clouddrove/action-slack@v2
+      #   with:
+      #     status: ${{ job.status }}
+      #     fields: repo,author
+      #     author_name: 'CloudDrove'
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # required
+      #     #SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_TERRAFORM }} # required
+      #   if: always()

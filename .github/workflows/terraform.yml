@@ -63,7 +63,7 @@ jobs:
         uses: azure/CLI@v1
         with:
          azcliversion: 2.30.0
-        inlineScript: |
+         inlineScript: |
           az account show
 
       - name: 'terraform plan'

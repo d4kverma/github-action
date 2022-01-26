@@ -63,20 +63,14 @@ jobs:
         uses: azure/login@v1
         with:
          creds: ${{ secrets.AZURE_CREDENTIALS }}
-      
-      - name: 'terraform plan'
-        uses: 'clouddrove/github-actions@v9.0.1'
-        with:
-          actions_subcommand: 'plan'
-          tf_actions_working_dir: ./_example
-          
+
       - name: Dev TF Plan
         uses: Pwd9000-ML/terraform-azurerm-plan@v1.0.0
         with:
           path: "./_example/"                 ## (Optional) Specify path TF module relevant to repo root. Default="."
-          az_resource_group: "resource-group-name" ## (Required) AZ backend - AZURE Resource Group hosting terraform backend storage acc 
-          az_storage_acc: "storage-account-name"   ## (Required) AZ backend - AZURE terraform backend storage acc 
-          az_container_name: "container-name"      ## (Required) AZ backend - AZURE storage container hosting state files 
+          az_resource_group: "testing" ## (Required) AZ backend - AZURE Resource Group hosting terraform backend storage acc 
+          az_storage_acc: "githubactionhosted"   ## (Required) AZ backend - AZURE terraform backend storage acc 
+          az_container_name: "githubaction"      ## (Required) AZ backend - AZURE storage container hosting state files 
           tf_key: "state-file-name"                ## (Required) AZ backend - Specifies name that will be given to terraform state file and plan artifact
           tf_vars_file: "tfvars-file-name"         ## (Required) Specifies Terraform TFVARS file name inside module path
           enable_TFSEC: true                       ## (Optional)  Enable TFSEC IaC scans

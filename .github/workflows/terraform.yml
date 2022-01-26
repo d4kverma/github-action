@@ -64,20 +64,19 @@ jobs:
         with:
          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Dev TF Plan
-        uses: Pwd9000-ML/terraform-azurerm-plan@v1.0.0
+      - name: "Terraform Plan"
+        uses: hashicorp/terraform-github-actions@master
         with:
-          path: "./_example/"                 ## (Optional) Specify path TF module relevant to repo root. Default="."
-          az_resource_group: "testing" ## (Required) AZ backend - AZURE Resource Group hosting terraform backend storage acc 
-          az_storage_acc: "githubactionhosted"   ## (Required) AZ backend - AZURE terraform backend storage acc 
-          az_container_name: "githubaction"      ## (Required) AZ backend - AZURE storage container hosting state files 
-          tf_key: "state-file-name"                ## (Required) AZ backend - Specifies name that will be given to terraform state file and plan artifact
-          tf_vars_file: "tfvars-file-name"         ## (Required) Specifies Terraform TFVARS file name inside module path
-          enable_TFSEC: true                       ## (Optional)  Enable TFSEC IaC scans
-          arm_client_id: ${{ secrets.CLIENT_ID }}             ## (Required) ARM Client ID 
-          arm_client_secret: ${{ secrets.CLIENT_SECRET }}     ## (Required)ARM Client Secret
-          arm_subscription_id: ${{ secrets.SUBSCRIPTION_ID }} ## (Required) ARM Subscription ID
-          arm_tenant_id: ${{ secrets.TENANT_ID }}             ## (Required) ARM Tenant ID
+          tf_actions_version: 0.12.13
+          tf_actions_subcommand: "plan"
+          tf_actions_working_dir: "./_example"
+          tf_actions_comment: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TF_VAR_agent_client_id: ${{ secrets.CLIENT_ID }}
+          TF_VAR_agent_client_secret: ${{ secrets.CLIENT_SECRET }}
+          TF_VAR_subscription_id: ${{ secrets.SUBSCRIPTION_ID }}
+          TF_VAR_tenant_id: ${{ secrets.TENANT_ID }}
 
   pre-commit:
     name: 'Pre-Commit'

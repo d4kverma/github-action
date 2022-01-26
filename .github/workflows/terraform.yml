@@ -73,6 +73,9 @@ jobs:
       - name: Terraform Format
         run: terraform fmt -check
 
+      - name: move to example directory 
+        run: cd _example/
+        
       - name: Terraform Plan
         run: terraform plan
 

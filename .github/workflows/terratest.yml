@@ -25,5 +25,4 @@ jobs:
         with:
           actions_subcommand: 'terratest'
           if: ${{ github.event.label.name == 'terratest' }}
-          tf_actions_working_dir: '_test'
-    
+          tf_actions_working_dir: '_test'   

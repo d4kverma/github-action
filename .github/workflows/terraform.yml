@@ -1,16 +1,30 @@
-on: [push]
-
-name: AzureLoginSample
+name: 'Terratest GitHub Actions'
+on:
+  pull_request:
+    branches:
+      - master
+    types: [labeled]
 
 jobs:
-
-  build-and-deploy:
+  Terratest:
+    name: 'terratest'
     runs-on: ubuntu-latest
     steps:
+
+      - name: 'Checkout'
+        uses: actions/checkout@v2.3.4
+          
+      - uses: azure/login@v1
+        with:
+         creds: ${{ secrets.AZURE_CREDENTIALS }}
+         run: |
+          az webapp list --query "[?state=='Running']"
+      
+      - name: 'terratest'
+        uses: 'clouddrove/github-actions@v9.0.1'
+        with:
+          actions_subcommand: 'terratest'
+          if: ${{ github.event.label.name == 'terratest' }}
+          tf_actions_working_dir: '_test'
     
-    - uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-    
-    - run: |
-        az webapp list --query "[?state=='Running']"
+ 

@@ -61,19 +61,19 @@ jobs:
         run: |
           sudo curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash 
       
-      - name: 'Verfiying logins'
-        run: |
-         az group list
-         curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
-         sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-         sudo apt-get update && sudo apt-get install terraform
+      
          
       - name: 'terraform init'
         uses: 'clouddrove/github-actions@v9.0.1'
         with:
           actions_subcommand: 'init'
           tf_actions_working_dir: ./_example
-
+      
+      - name: 'Verfiying logins'
+        run: |
+         az group list
+         az ad signed-in-user show
+         
       - name: 'terraform plan'
         uses: 'clouddrove/github-actions@v9.0.1'
         with:

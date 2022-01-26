@@ -67,10 +67,10 @@ jobs:
           actions_subcommand: 'init'
           tf_actions_working_dir: ./_example
 
-      - name: 'terraform validate'
+      - name: 'terraform plan'
         uses: 'clouddrove/github-actions@v9.0.1'
         with:
-          actions_subcommand: 'validate'
+          actions_subcommand: 'plan'
           tf_actions_working_dir: ./_example
 
   pre-commit:

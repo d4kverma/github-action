@@ -63,7 +63,7 @@ jobs:
       
       - name: 'Verfiying logins'
         run: |
-         az webapp list --query "[?state=='Running']"
+         az group list
          
       - name: 'terraform init'
         uses: 'clouddrove/github-actions@v9.0.1'

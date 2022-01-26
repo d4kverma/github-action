@@ -44,10 +44,10 @@ jobs:
   plan:
     name: 'terraform plan'
     env: 
-      ARM_CLIENT_ID: ${{ secrets.clientId   }}
-      ARM_CLIENT_SECRETS: ${{ secrets.clientSecret }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.subscriptionId }}
-      ARM_TENANT_ID: ${{ secrets.tenantId }}
+      ARM_CLIENT_ID: ${{ secrets.CLIENT_ID   }}
+      ARM_CLIENT_SECRETS: ${{ secrets.CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
@@ -63,19 +63,27 @@ jobs:
         uses: azure/login@v1
         with:
          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: Azure CLI script
-        uses: azure/CLI@v1
-        with:
-         azcliversion: 2.30.0
-         inlineScript: |
-          az account show
-
+      
       - name: 'terraform plan'
         uses: 'clouddrove/github-actions@v9.0.1'
         with:
           actions_subcommand: 'plan'
           tf_actions_working_dir: ./_example
+          
+      - name: Dev TF Plan
+        uses: Pwd9000-ML/terraform-azurerm-plan@v1.0.0
+        with:
+          path: "./_example/"                 ## (Optional) Specify path TF module relevant to repo root. Default="."
+          az_resource_group: "resource-group-name" ## (Required) AZ backend - AZURE Resource Group hosting terraform backend storage acc 
+          az_storage_acc: "storage-account-name"   ## (Required) AZ backend - AZURE terraform backend storage acc 
+          az_container_name: "container-name"      ## (Required) AZ backend - AZURE storage container hosting state files 
+          tf_key: "state-file-name"                ## (Required) AZ backend - Specifies name that will be given to terraform state file and plan artifact
+          tf_vars_file: "tfvars-file-name"         ## (Required) Specifies Terraform TFVARS file name inside module path
+          enable_TFSEC: true                       ## (Optional)  Enable TFSEC IaC scans
+          arm_client_id: ${{ secrets.CLIENT_ID }}             ## (Required) ARM Client ID 
+          arm_client_secret: ${{ secrets.CLIENT_SECRET }}     ## (Required)ARM Client Secret
+          arm_subscription_id: ${{ secrets.SUBSCRIPTION_ID }} ## (Required) ARM Subscription ID
+          arm_tenant_id: ${{ secrets.TENANT_ID }}             ## (Required) ARM Tenant ID
 
   pre-commit:
     name: 'Pre-Commit'

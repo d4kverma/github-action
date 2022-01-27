@@ -17,64 +17,30 @@ jobs:
         with:
           actions_subcommand: 'fmt'
 
-  validate:
-    name: 'terraform validate'
+  terraform:
     runs-on: ubuntu-latest
+
+    env:
+      ARM_CLIENT_ID: ${{secrets.CLIENT_ID}}
+      ARM_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
+      ARM_SUBSCRIPTION_ID: ${{secrets.SUBSCRIPTION_ID}}
+      ARM_TENANT_ID: ${{secrets.TENANT_ID}}
+
     steps:
-      - name: 'Checkout'
-        uses: actions/checkout@v2.3.4
-
-      - name: 'Configure AZURE Credentials'
-        uses: azure/login@v1
-        with:
-         creds: ${{ secrets.AZURE_CREDENTIALS }}
-    
-      - name: 'terraform init'
-        uses: 'clouddrove/github-actions@v9.0.1'
-        with:
-          actions_subcommand: 'init'
-          tf_actions_working_dir: ./_example
-
-      - name: 'terraform validate'
-        uses: 'clouddrove/github-actions@v9.0.1'
-        with:
-          actions_subcommand: 'validate'
-          tf_actions_working_dir: ./_example
-
-  plan:
-    name: 'terraform plan'
-    runs-on: ubuntu-latest
-    steps:
-      - name: 'Checkout'
-        uses: actions/checkout@v2.3.4
-      
-      - name: 'Azure logins'
-        uses: azure/login@v1
-        with:
-         creds: ${{ secrets.AZURE_CREDENTIALS }}
-       
-      - name: 'Installing azure Cli' 
-        run: |
-          sudo curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash 
-      
-      
-         
-      - name: 'terraform init'
-        uses: 'clouddrove/github-actions@v9.0.1'
-        with:
-          actions_subcommand: 'init'
-          tf_actions_working_dir: ./_example
-      
-      - name: 'Verfiying logins'
-        run: |
-         az group list
-         
+      - uses: actions/checkout@v2
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
-      - name: 'Terraform plan'
-        run: |
-         terraformm plan
+
+      - name: Terraform Init
+        run: terraform init
+        
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan
+        
 
   pre-commit:
     name: 'Pre-Commit'

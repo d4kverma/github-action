@@ -46,8 +46,7 @@ jobs:
     name: 'Pre-Commit'
     needs:
       - fmt
-      - plan
-      - validate
+      - terraform
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'

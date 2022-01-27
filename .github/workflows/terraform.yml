@@ -52,10 +52,6 @@ jobs:
         uses: azure/login@v1
         with:
          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-      - name: 'Verfiying logins'
-        run: |
-         az webapp list --query "[?state=='Running']"
        
       - name: 'Installing azure Cli' 
         run: |
@@ -73,12 +69,12 @@ jobs:
         run: |
          az group list
          az ad signed-in-user show
-         
-      - name: 'terraform plan'
-        uses: 'clouddrove/github-actions@v9.0.1'
-        with:
-          actions_subcommand: 'plan'
-          tf_actions_working_dir: ./_example
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+      - name: 'Terraform plan'
+        run: |
+         terrafrom plan
 
   pre-commit:
     name: 'Pre-Commit'

@@ -68,7 +68,7 @@ jobs:
       - name: 'Verfiying logins'
         run: |
          az group list
-         az ad signed-in-user show
+         
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1

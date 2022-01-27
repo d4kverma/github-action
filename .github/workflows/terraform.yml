@@ -27,6 +27,9 @@ jobs:
       ARM_TENANT_ID: ${{secrets.TENANT_ID}}
 
     steps:
+      - name: Directory path 
+        run: cd _example/  
+        
       - uses: actions/checkout@v2
 
       - name: Setup Terraform
@@ -35,8 +38,6 @@ jobs:
       - name: Terraform Init
         run: terraform init
 
-      - name: Directory path 
-        run: cd _example/  
         
       - name: Terraform Validate
         run: terraform validate

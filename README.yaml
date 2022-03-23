@@ -6,26 +6,26 @@
 
 
 # Name of this project
-name: Terraform AZURE RESOURCE-GROUP
+name: Terraform AWS VPC
 
 # License of this project
-license: "APACHE"
+license: "MIT"
 
 # Canonical GitHub repo
-github_repo: clouddrove/terraform-azure-resource-group
+github_repo: clouddrove/terraform-aws-vpc
 
 # Badges to display
 badges:
   - name: "Terraform"
-    image: "https://img.shields.io/badge/Terraform-v1.0.0-green"
+    image: "https://img.shields.io/badge/Terraform-v0.15-green"
     url: "https://www.terraform.io"
   - name: "Licence"
-    image: "https://img.shields.io/badge/License-APACHE-blue.svg"
+    image: "https://img.shields.io/badge/License-MIT-blue.svg"
     url: "LICENSE.md"
 
 #  description of this project
 description: |-
-  Terraform module to create RESOURCE-GROUP resource on AZURE.
+  Terraform module to create VPC resource on AWS.
 
 # extra content
 include:
@@ -37,12 +37,12 @@ usage: |-
   ### Simple Example
   Here is an example of how you can use this module in your inventory structure:
     ```hcl
-    module "resource_group" {
-     source      = "terraform/resource-group/azure"
-     version     = "1.0.0"
-     environment = "test"
-     label_order = ["name","environment"]
-     name        = "example"
-     location    = "North Europe"
-    }
+    module "vpc" {
+        source      = "clouddrove/vpc/aws"
+        version     = "0.15.0"
+        name        = "vpc"
+        environment = "test"
+        label_order = ["name", "environment"]
+        cidr_block  = "10.0.0.0/16"
+      }
     ```

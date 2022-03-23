@@ -30,12 +30,11 @@ override.tf.json
 
 
 
-
+  
 # ignored files
 *.tfstate
 *.tfstate.backup
 .terraform
 .idea
 *.iml
-_example/.terraform.tfstate.lock.info
-.terraform.lock.hcl
+*.terraform.lock.hcl

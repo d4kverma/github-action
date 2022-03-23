@@ -19,11 +19,15 @@ jobs:
          creds: ${{ secrets.AZURE_CREDENTIALS }}
          run: |
           az webapp list --query "[?state=='Running']"
-      
+       
+      - name: 'Installing azure Cli' 
+        run: |
+          sudo curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash 
+
       - name: 'terratest'
         uses: 'clouddrove/github-actions@v9.0.1'
         with:
           actions_subcommand: 'terratest'
           if: ${{ github.event.label.name == 'terratest' }}
-          tf_actions_working_dir: '_test'
-    
+          tf_actions_working_dir: '_test'   
+

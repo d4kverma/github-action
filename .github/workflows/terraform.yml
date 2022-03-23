@@ -17,41 +17,64 @@ jobs:
         with:
           actions_subcommand: 'fmt'
 
-  terraform:
+  validate:
+    name: 'terraform validate'
     runs-on: ubuntu-latest
-
-    env:
-      ARM_CLIENT_ID: ${{secrets.CLIENT_ID}}
-      ARM_CLIENT_SECRET: ${{secrets.CLIENT_SECRET}}
-      ARM_SUBSCRIPTION_ID: ${{secrets.SUBSCRIPTION_ID}}
-      ARM_TENANT_ID: ${{secrets.TENANT_ID}}
-
     steps:
-        
-      - uses: actions/checkout@v2
+      - name: 'Checkout'
+        uses: actions/checkout@v2.3.4
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+      - name: 'Configure AWS Credentials'
+        uses: clouddrove/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.TEST_AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.TEST_AWS_ACCESS_SECRET_KEY }}
+          aws-region: us-east-2
 
-      - name: Directory path 
-        run: cd _example/  
-        
-      - name: Terraform Init
-        run: terraform init
+      - name: 'terraform init'
+        uses: 'clouddrove/github-actions@v9.0.1'
+        with:
+          actions_subcommand: 'init'
+          tf_actions_working_dir: ./_example
 
-        
-      - name: Terraform Validate
-        run: terraform validate
+      - name: 'terraform validate'
+        uses: 'clouddrove/github-actions@v9.0.1'
+        with:
+          actions_subcommand: 'validate'
+          tf_actions_working_dir: ./_example
 
-      - name: Terraform Plan
-        run: terraform plan
-        
+  plan:
+    name: 'terraform plan'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v2.3.4
+
+      - name: 'terraform init'
+        uses: 'clouddrove/github-actions@v9.0.1'
+        with:
+          actions_subcommand: 'init'
+          tf_actions_working_dir: ./_example
+
+      - name: 'Configure AWS Credentials'
+        uses: clouddrove/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.TEST_AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.TEST_AWS_ACCESS_SECRET_KEY }}
+          aws-region: us-east-2
+
+      - name: 'terraform plan'
+        uses: 'clouddrove/github-actions@v9.0.1'
+        with:
+          actions_subcommand: 'plan'
+          tf_actions_working_dir: ./_example
 
   pre-commit:
     name: 'Pre-Commit'
     needs:
       - fmt
-      - terraform
+      - plan
+      - validate
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
@@ -65,3 +88,13 @@ jobs:
         uses: pre-commit/action@v2.0.3
         continue-on-error: true
 
+      - name: 'Slack Notification'
+        uses: clouddrove/action-slack@v2
+        with:
+          status: ${{ job.status }}
+          fields: repo,author
+          author_name: 'CloudDrove'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # required
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_TERRAFORM }} # required
+        if: always()

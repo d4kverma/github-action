@@ -42,6 +42,7 @@ resource "aws_vpc" "default" {
   }
 }
 
+
 #Module      : INTERNET GATEWAY
 #Description : Terraform module which creates Internet Geteway resources on AWS
 resource "aws_internet_gateway" "default" {

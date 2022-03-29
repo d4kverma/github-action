@@ -1,12 +1,12 @@
 // Managed By : CloudDrove
-// Description : This terratest is used to test the Terraform VPC module.
+// Description : This Terratest is used to test the Terraform S3 module.
 // Copyright @ CloudDrove. All Right Reserved.
 package test
 
 import (
 	"testing"
-	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/stretchr/testify/assert"
+	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
 func Test(t *testing.T) {
@@ -14,7 +14,8 @@ func Test(t *testing.T) {
 
 	terraformOptions := &terraform.Options{
 		// Source path of Terraform directory.
-		TerraformDir: "../_example",
+		TerraformDir: "../../_example/logging-encryption-s3",
+		Upgrade: true,
 	}
 
 	// This will run 'terraform init' and 'terraform application' and will fail the test if any errors occur
@@ -26,7 +27,6 @@ func Test(t *testing.T) {
 	// To get the value of an output variable, run 'terraform output'
 	Tags := terraform.OutputMap(t, terraformOptions, "tags")
 
-	// Check that we get back the outputs that we expect
-	assert.Equal(t, "vpc-test", Tags["Name"])
-
+	// Verify we're getting back the outputs we expect
+	assert.Equal(t, "clouddrove-logging-encryption-bucket-test", Tags["Name"])
 }

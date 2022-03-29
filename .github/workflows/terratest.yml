@@ -6,8 +6,8 @@ on:
     types: [labeled]
 
 jobs:
-  Terratest:
-    name: 'terratest'
+  default-s3:
+    name: 'Terratest for default-s3'
     runs-on: ubuntu-latest
     steps:
 
@@ -21,12 +21,25 @@ jobs:
           aws-secret-access-key: ${{ secrets.TEST_AWS_ACCESS_SECRET_KEY }}
           aws-region: us-east-2
 
-      - name: 'terratest'
-        uses: 'clouddrove/github-actions@v9.0.1'
+      - name: 'Terratest for default-s3'
+        if: ${{ github.event.label.name == 'terratest' }}
+        uses: 'clouddrove/github-actions@v8.0'
         with:
           actions_subcommand: 'terratest'
-          if: ${{ github.event.label.name == 'terratest' }}
-          tf_actions_working_dir: '_test'
+          tf_actions_working_dir: '_test/default-s3'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+      - name: 'Terratest for encryption-s3'
+        if: ${{ github.event.label.name == 'terratest' }}
+        uses: 'clouddrove/github-actions@v8.0'
+        with:
+          actions_subcommand: 'terratest'
+          tf_actions_working_dir: '_test/encryption-s3'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
       - name: 'Slack Notification'
         uses: clouddrove/action-slack@v2
@@ -38,4 +51,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # required
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_TERRAFORM }} # required
         if: always()
-        

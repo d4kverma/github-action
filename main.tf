@@ -17,6 +17,7 @@ module "labels" {
   repository  = var.repository
 }
 
+
 #Module      : VPC
 #Description : Terraform module to create VPC resource on AWS.
 resource "aws_vpc" "default" {
